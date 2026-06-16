@@ -10,6 +10,8 @@ use App\Http\Controllers\TicketController;
 // Routes publiques
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+// Route publique pour la landing page
+Route::get('/terrains-public', [TerrainController::class, 'index']);
 
 // Routes protégées (utilisateur connecté)
 Route::middleware('auth:sanctum')->group(function () {

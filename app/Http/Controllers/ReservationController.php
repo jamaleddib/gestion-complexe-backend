@@ -54,7 +54,7 @@ class ReservationController extends Controller
         return response()->json($reservation, 201);
     }
 
-    // USER : payer une réservation acceptée
+
     public function payer(Reservation $reservation, Request $request)
 {
     if ($reservation->id_client !== $request->user()->id) {
@@ -91,7 +91,7 @@ class ReservationController extends Controller
     return response()->json($reservation);
 }
 
-    // ADMIN : voir toutes les réservations
+
     public function index()
     {
         $reservations = Reservation::with(['terrain', 'client'])
@@ -101,7 +101,7 @@ class ReservationController extends Controller
         return response()->json($reservations);
     }
 
-    // ADMIN : accepter ou refuser une réservation
+   
     public function updateStatut(Request $request, Reservation $reservation)
     {
         $validated = $request->validate([

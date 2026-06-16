@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
-    // ADMIN : liste de tous les clients (role = user)
+
     public function index()
     {
         $clients = User::where('role', 'user')->get();
@@ -15,7 +15,7 @@ class ClientController extends Controller
         return response()->json($clients);
     }
 
-    // ADMIN : modifier un client
+
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -29,7 +29,7 @@ class ClientController extends Controller
         return response()->json($user);
     }
 
-    // ADMIN : supprimer un client
+    
     public function destroy(User $user)
     {
         if ($user->role === 'admin') {
