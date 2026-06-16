@@ -90,6 +90,16 @@
                 <td class="label">Statut paiement :</td>
                 <td><span class="badge">Payé</span></td>
             </tr>
+            <tr>
+    <td class="label">Mode de paiement :</td>
+    <td>
+        @if($reservation->mode_paiement === 'carte')
+            Carte bancaire
+        @else
+             Espèces
+        @endif
+    </td>
+    </tr>
         </table>
         <div class="footer">
             Merci d'avoir réservé avec nous ! Présentez ce ticket à l'entrée.

@@ -56,34 +56,40 @@ class ReservationController extends Controller
 
     // USER : payer une réservation acceptée
     public function payer(Reservation $reservation, Request $request)
-    {
-        if ($reservation->id_client !== $request->user()->id) {
-            return response()->json(['message' => 'Accès interdit'], 403);
-        }
-
-        if ($reservation->statut !== 'acceptee') {
-            return response()->json([
-                'message' => 'Cette réservation doit être acceptée avant le paiement.',
-            ], 422);
-        }
-
-        if ($reservation->paiement === 'paye') {
-            return response()->json(['message' => 'Cette réservation est déjà payée.'], 422);
-        }
-
-        // Vérifier si le délai de paiement (24h) est dépassé
-        if ($reservation->date_limite_paiement && now()->greaterThan($reservation->date_limite_paiement)) {
-            $reservation->update(['statut' => 'expiree']);
-
-            return response()->json([
-                'message' => 'Le délai de paiement de 24h est dépassé. Réservation expirée.',
-            ], 422);
-        }
-
-        $reservation->update(['paiement' => 'paye']);
-
-        return response()->json($reservation);
+{
+    if ($reservation->id_client !== $request->user()->id) {
+        return response()->json(['message' => 'Accès interdit'], 403);
     }
+
+    if ($reservation->statut !== 'acceptee') {
+        return response()->json([
+            'message' => 'Cette réservation doit être acceptée avant le paiement.',
+        ], 422);
+    }
+
+    if ($reservation->paiement === 'paye') {
+        return response()->json(['message' => 'Cette réservation est déjà payée.'], 422);
+    }
+
+    if ($reservation->date_limite_paiement && now()->greaterThan($reservation->date_limite_paiement)) {
+        $reservation->update(['statut' => 'expiree']);
+
+        return response()->json([
+            'message' => 'Le délai de paiement de 24h est dépassé. Réservation expirée.',
+        ], 422);
+    }
+
+    $validated = $request->validate([
+        'mode_paiement' => 'required|in:carte,especes',
+    ]);
+
+    $reservation->update([
+        'paiement' => 'paye',
+        'mode_paiement' => $validated['mode_paiement'],
+    ]);
+
+    return response()->json($reservation);
+}
 
     // ADMIN : voir toutes les réservations
     public function index()

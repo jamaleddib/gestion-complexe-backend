@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
 {
-    protected $fillable = ['id_client', 'id_terrain', 'date', 'heure_debut', 'heure_fin', 'statut', 'paiement', 'date_limite_paiement'];
+    protected $fillable = [
+    'id_client', 'id_terrain', 'date', 'heure_debut', 'heure_fin',
+    'statut', 'paiement', 'date_limite_paiement', 'mode_paiement'];
     protected $casts = ['date_limite_paiement' => 'datetime',];
     public function client()
     {
